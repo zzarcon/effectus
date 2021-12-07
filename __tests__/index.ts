@@ -45,4 +45,17 @@ describe('effectus', () => {
 
     expect(callback).toBeCalledTimes(2)
   })
+
+  it('should not call effect after consumer unsubscribed from signal', () => {
+    const [name, setName] = signal('hector');
+    const callback = jest.fn();
+
+    const unsubscribe = effect(callback, [name]);
+
+    setName('john')
+    unsubscribe();
+    setName('paco')
+
+    expect(callback).toBeCalledTimes(1)
+  })
 });

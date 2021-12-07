@@ -12,7 +12,7 @@ export function signal<T>(initialValue: T): [() => T, (newValue: T) => void] {
   const setValue = (newValue: T) => {
     signals.set(signalKey, newValue);
 
-    callbacks.get(readValue)?.forEach(callback => {
+    callbacks.get(readValue)?.forEach((callback) => {
       callback();
     });
   };
@@ -20,11 +20,20 @@ export function signal<T>(initialValue: T): [() => T, (newValue: T) => void] {
   signals.set(signalKey, initialValue);
   callbacks.set(readValue, []);
 
-  return [readValue, setValue]
+  return [readValue, setValue];
 }
 
 export const effect = (callback: Function, dependencies: Function[]) => {
-  dependencies.forEach(dependency => {
+  dependencies.forEach((dependency) => {
     callbacks.get(dependency)?.push(callback);
   });
-}
+
+  return () => {
+    dependencies.forEach((dependency) => {
+      const dependencyCallbacks = callbacks.get(dependency) || [];
+      const index = dependencyCallbacks.findIndex((cb) => cb === callback);
+
+      dependencyCallbacks.splice(index, 1);
+    });
+  };
+};
