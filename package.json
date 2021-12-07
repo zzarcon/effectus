@@ -1,6 +1,6 @@
 {
   "name": "effectus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "micro reactive state management - just for fun",
   "main": "dist/es5/index.js",
   "repository": "git@github.com:zzarcon/effectus.git",
